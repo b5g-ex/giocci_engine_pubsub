@@ -69,4 +69,82 @@ defmodule GiocciEnginePubsub do
 
   # |> String.split(["\n"," "])
 
+
+
+
+
+
+
+
+  defmodule TaskSimulator do
+    use GenServer
+
+
+    def init(init) do
+      queue=:queue.new
+      {:ok, queue}
+
+    end
+
+    def handle_call(:get_newtask,from, queue)do
+
+      {task, queue} = :queue.out(queue)
+      {:reply, task, queue}
+    end
+
+    def handle_call(:push_newtask,from, queue)do
+
+      {task, queue} = :queue.in(queue)
+      {:reply, task, queue}
+    end
+
+    def handle_info(:get_status, queue) do
+      {:reply, queue}
+
+    end
+
+
+
+
+
+    def task_do do
+      Process.sleep(100)
+    end
+  end
+
+end
+
+
+
+
+defmodule TaskSimulator do
+  use GenServer
+
+
+  def init(init) do
+    queue=:queue.new
+    {:ok, queue}
+
+  end
+
+  def handle_call(:get_newtask,from, queue)do
+
+    {task, queue} = :queue.out(queue)
+    {:reply, task, queue}
+  end
+
+  def handle_call(:push_newtask,from, queue)do
+
+    {task, queue} = :queue.in(queue)
+    {:reply, task, queue}
+  end
+
+  def handle_info(:get_status, queue) do
+    {:reply, queue}
+
+  end
+
+
+
+
 end
