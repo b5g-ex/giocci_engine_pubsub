@@ -14,9 +14,7 @@ defmodule GiocciEnginePubsub do
       :world
 
   """
-  def hello do
-    :world
-  end
+  defstruct [:queue_number ,:RT ,:linux_info ]
 
   def start_engine_pubsub do
 
@@ -52,97 +50,36 @@ defmodule GiocciEnginePubsub do
     IO.puts(m)
     # return_publish(session)
   end
-  def send_linux_meminfo() do
+  def getting_linux_meminfo() do
     session = Zenohex.open
-    [memtotal, memfree |other ]=get_linux_meminfo()
+    [memtotal, memfree |other ] = LinuxStatuRead.get_linux_meminfo()
     memtotal
     memfree
-    publish(session,memtotal <> "," <>  memfree)
+    clock = DateTime.utc_now()
+    %GiocciEnginePubsub{Linux_info: [memtotal, memfree, clock]}
+    # publish(session,memtotal <> "," <>  memfree)
   end
 
-  def get_linux_meminfo() do
-    File.read!("/proc/meminfo")
-    |> String.split("\n", trim: true)
-    |> List.delete(" ")
-    # |> List.keyfind(:MemFree,0)
+  def handle_cast({:update_RT,processing_time}, state) do
+    %GiocciEnginePubsub{RT: [processing_time, clock]}
+    {:noreply, state}
   end
+
+  def handle_cast({:update_queue_number,queue_number,clock}, state) do
+    %GiocciEnginePubsub{queue_number: [queue_number, clock]}
+    {:noreply, state}
+  end
+
+  # def get_linux_meminfo() do
+  #   File.read!("/proc/meminfo")
+  #   |> String.split("\n", trim: true)
+  #   |> List.delete(" ")
+  #   # |> List.keyfind(:MemFree,0)
+  # end
 
   # |> String.split(["\n"," "])
 
 
-
-
-
-
-
-
-  defmodule TaskSimulator do
-    use GenServer
-
-
-    def init(init) do
-      queue=:queue.new
-      {:ok, queue}
-
-    end
-
-    def handle_call(:get_newtask,from, queue)do
-
-      {task, queue} = :queue.out(queue)
-      {:reply, task, queue}
-    end
-
-    def handle_call(:push_newtask,from, queue)do
-
-      {task, queue} = :queue.in(queue)
-      {:reply, task, queue}
-    end
-
-    def handle_info(:get_status, queue) do
-      {:reply, queue}
-
-    end
-
-
-
-
-
-    def task_do do
-      Process.sleep(100)
-    end
-  end
-
-end
-
-
-
-
-defmodule TaskSimulator do
-  use GenServer
-
-
-  def init(init) do
-    queue=:queue.new
-    {:ok, queue}
-
-  end
-
-  def handle_call(:get_newtask,from, queue)do
-
-    {task, queue} = :queue.out(queue)
-    {:reply, task, queue}
-  end
-
-  def handle_call(:push_newtask,from, queue)do
-
-    {task, queue} = :queue.in(queue)
-    {:reply, task, queue}
-  end
-
-  def handle_info(:get_status, queue) do
-    {:reply, queue}
-
-  end
 
 
 
