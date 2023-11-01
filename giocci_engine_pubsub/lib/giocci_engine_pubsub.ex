@@ -51,13 +51,22 @@ defmodule GiocciEnginePubsub do
     # return_publish(session)
   end
   def getting_linux_meminfo() do
-    session = Zenohex.open
-    [memtotal, memfree |other ] = LinuxStatuRead.get_linux_meminfo()
-    memtotal
-    memfree
+    # session = Zenohex.open
+    # [memtotal, memfree |other ] = LinuxStatuRead.get_linux_meminfo()
+    # memtotal
+    # memfree
     clock = DateTime.utc_now()
     %GiocciEnginePubsub{Linux_info: [memtotal, memfree, clock]}
     # publish(session,memtotal <> "," <>  memfree)
+  end
+
+  def init() do
+    {:ok, %GiocciEnginePubsub{}}
+  end
+
+  def handle_cast({:update_linux_data,memtotal,memfree,clock}, state) do
+    %GiocciEnginePubsub{linux_info: [memtotal, memfree, clock]}
+    {:noreply, state}
   end
 
   def handle_cast({:update_RT,processing_time}, state) do

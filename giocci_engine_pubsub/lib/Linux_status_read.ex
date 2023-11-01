@@ -8,10 +8,14 @@ defmodule LinuxStatusRead do
   # end
 
   def get_linux_meminfo() do
-    File.read!("/proc/meminfo")
-    |> String.split("\n", trim: true)
-    |> List.delete(" ")
+    [memtotal, memfree |other ] =
+      File.read!("/proc/meminfo")
+      |> String.split("\n", trim: true)
+      |> List.delete(" ")
     # |> List.keyfind(:MemFree,0)
+
+    clock = DateTime.utc_now()
+    GenServer.cast(GiocciEnginePubsub,{:update_linux_data,memtotal,memfree,clock})
   end
 
 end
