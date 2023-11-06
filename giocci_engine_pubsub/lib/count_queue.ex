@@ -1,4 +1,4 @@
-defmodule CountRT do
+defmodule CountQueue do
   # use GenServer
 
   def count_queue do
@@ -6,7 +6,7 @@ defmodule CountRT do
 
   end
 
-  def update_queue_number do
+  def update_queue_number (number)do
     clock = DateTime.utc_now()
     GenServer.cast(GiocciEnginePubsub,{:update_queue_number, number, clock})
   end

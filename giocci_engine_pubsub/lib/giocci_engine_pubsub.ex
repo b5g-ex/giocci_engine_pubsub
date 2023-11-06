@@ -54,14 +54,15 @@ defmodule GiocciEnginePubsub do
     # session = Zenohex.open
     # [memtotal, memfree |other ] = LinuxStatuRead.get_linux_meminfo()
     # memtotal
-    # memfree
-    clock = DateTime.utc_now()
-    %GiocciEnginePubsub{Linux_info: [memtotal, memfree, clock]}
+    # # memfree
+    # clock = DateTime.utc_now()
+    # %GiocciEnginePubsub{Linux_info: [memtotal, memfree, clock]}
     # publish(session,memtotal <> "," <>  memfree)
   end
 
-  def init() do
-    {:ok, %GiocciEnginePubsub{}}
+  def init(initial) do
+    state = %GiocciEnginePubsub{}
+   {:ok, state}
   end
 
   def handle_cast({:update_linux_data,memtotal,memfree,clock}, state) do
@@ -69,16 +70,20 @@ defmodule GiocciEnginePubsub do
     {:noreply, state}
   end
 
-  def handle_cast({:update_RT,processing_time}, state) do
+  def handle_cast({:update_RT,processing_time,clock}, state) do
     %GiocciEnginePubsub{RT: [processing_time, clock]}
     {:noreply, state}
   end
 
   def handle_cast({:update_queue_number,queue_number,clock}, state) do
-    %GiocciEnginePubsub{queue_number: [queue_number, clock]}
-    {:noreply, state}
+    new_state = %GiocciEnginePubsub{state | queue_number: [queue_number, clock]}
+    {:noreply, new_state}
   end
 
+
+  def handle_call(:check_status, from, state) do
+    {:reply, state,state}
+  end
   # def get_linux_meminfo() do
   #   File.read!("/proc/meminfo")
   #   |> String.split("\n", trim: true)

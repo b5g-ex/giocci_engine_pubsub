@@ -3,13 +3,13 @@ defmodule CountRT do
 
   def count_start do
     start = DateTime.utc_now()
-    GenServer.cast(CountRT,{:reserve_start_utc,start_time})
+    GenServer.cast(CountRT,{:reserve_start_utc,start})
   end
 
   def count_finish do
     finish = DateTime.utc_now()
     start = GenServer.call(CounTRT,:get_start_utc)
-    processing_time = 100
+    processing_time = 10000
     GenServer.cast(GiocciEnginePubsub,{:update_RT,processing_time,finish})
 
   end

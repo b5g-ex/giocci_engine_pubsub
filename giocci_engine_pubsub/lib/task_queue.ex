@@ -23,7 +23,7 @@ defmodule TaskQueue do
   # def handle_info(:get_status, queue) do
   #   {:reply, queue}
 
-  # end
+  # enda
 
   def init(init) do
     {:ok, []}
@@ -41,7 +41,8 @@ defmodule TaskQueue do
     {:reply, new_queue, new_queue}
   end
   def handle_call(:remaining_task, from, queue) do
-    number = len(queue)
+    # number = len(queue)
+    number = 100
     {:reply,number, queue}
   end
 
