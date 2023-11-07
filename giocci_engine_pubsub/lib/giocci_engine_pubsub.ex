@@ -60,23 +60,29 @@ defmodule GiocciEnginePubsub do
     # publish(session,memtotal <> "," <>  memfree)
   end
 
+  def start_link(state) do
+    GenServer.start_link(__MODULE__, state, name: __MODULE__)
+  end
   def init(initial) do
     state = %GiocciEnginePubsub{}
    {:ok, state}
   end
 
+
+
+
   def handle_cast({:update_linux_data,memtotal,memfree,clock}, state) do
-    %GiocciEnginePubsub{linux_info: [memtotal, memfree, clock]}
-    {:noreply, state}
+    new_state = %GiocciEnginePubsub{state | linux_info: %map{memtotal: memtotal, memfree: memfree, clock: clock}}
+    {:noreply, new_state}
   end
 
   def handle_cast({:update_RT,processing_time,clock}, state) do
-    %GiocciEnginePubsub{RT: [processing_time, clock]}
-    {:noreply, state}
+    new_state = %GiocciEnginePubsub{state | RT: %map{processing_time: processing_time, clock: clock}}
+    {:noreply, new_state}
   end
 
   def handle_cast({:update_queue_number,queue_number,clock}, state) do
-    new_state = %GiocciEnginePubsub{state | queue_number: [queue_number, clock]}
+    new_state = %GiocciEnginePubsub{state | queue_number: %map{queue_number: queue_number, clock: clock}}
     {:noreply, new_state}
   end
 
