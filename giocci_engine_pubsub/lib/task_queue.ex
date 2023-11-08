@@ -24,6 +24,11 @@ defmodule TaskQueue do
   #   {:reply, queue}
 
   # enda
+  def start_link(state) do
+    GenServer.start_link(__MODULE__, state, name: __MODULE__)
+  end
+
+
 
   def init(init) do
     {:ok, []}
@@ -41,8 +46,8 @@ defmodule TaskQueue do
     {:reply, new_queue, new_queue}
   end
   def handle_call(:remaining_task, from, queue) do
-    # number = len(queue)
-    number = 100
+    number = queue |> Enum.count
+    # number = 100
     {:reply,number, queue}
   end
 

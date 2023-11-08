@@ -72,17 +72,17 @@ defmodule GiocciEnginePubsub do
 
 
   def handle_cast({:update_linux_data,memtotal,memfree,clock}, state) do
-    new_state = %GiocciEnginePubsub{state | linux_info: %map{memtotal: memtotal, memfree: memfree, clock: clock}}
+    new_state = %GiocciEnginePubsub{state | linux_info: %{memtotal: memtotal, memfree: memfree, clock: clock}}
     {:noreply, new_state}
   end
 
   def handle_cast({:update_RT,processing_time,clock}, state) do
-    new_state = %GiocciEnginePubsub{state | RT: %map{processing_time: processing_time, clock: clock}}
+    new_state = %GiocciEnginePubsub{state | RT: %{processing_time: processing_time, clock: clock}}
     {:noreply, new_state}
   end
 
   def handle_cast({:update_queue_number,queue_number,clock}, state) do
-    new_state = %GiocciEnginePubsub{state | queue_number: %map{queue_number: queue_number, clock: clock}}
+    new_state = %GiocciEnginePubsub{state | queue_number: %{queue_number: queue_number, clock: clock}}
     {:noreply, new_state}
   end
 
