@@ -6,19 +6,22 @@ defmodule TaskDo do
   end
 
   def start_timemeasurment do
-    CountRT.count_start()
+    start_clo =  DateTime.utc_now()
   end
 
 
   def finish_timemeasurment do
-    CountRT.count_finish()
+    finish_clo =  DateTime.utc_now()
   end
 
   def main do
     client_data=load_task()
-    start_timemeasurment()
+    start_clock = start_timemeasurment()
     Process.sleep(1000)
-    finish_timemeasurment()
+    finish_clock = finish_timemeasurment()
+    # processing_time = finish_clock - start_clock
+    processing_time = 10000000
+    GenServer.cast(CountRT, {:send_RT,processing_time})
 
   end
 end
