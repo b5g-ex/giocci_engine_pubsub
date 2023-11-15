@@ -19,8 +19,8 @@ defmodule TaskDo do
     start_clock = start_timemeasurment()
     Process.sleep(1000)
     finish_clock = finish_timemeasurment()
-    # processing_time = finish_clock - start_clock
-    processing_time = 10000000
+    processing_time = DateTime.diff(finish_clock, start_clock, :microsecond)
+    # processing_time = 10000000
     GenServer.cast(CountRT, {:send_RT,processing_time})
 
   end

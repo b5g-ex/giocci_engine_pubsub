@@ -6,15 +6,15 @@ defmodule CountQueue do
 
   end
 
-  def update_queue_number (number)do
+  def update_queue_number(number)do
     clock = DateTime.utc_now()
     GenServer.cast(GiocciEnginePubsub,{:update_queue_number, number, clock})
   end
-  # def main do
-  #   number = count_queue()
-  #   update_queue_number(number)
-  #   Process.sleep(30000)
-  # end
+  def main do
+    number = count_queue()
+    update_queue_number(number)
+    # Process.sleep(30000)
+  end
 
 
 
