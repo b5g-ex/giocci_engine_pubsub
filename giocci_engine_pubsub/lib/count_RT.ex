@@ -36,7 +36,9 @@ defmodule CountRT do
     GenServer.start_link(__MODULE__, state, name: __MODULE__)
   end
 
-
+  def send_RT do
+    GenServer.call(CountRT,{:send_RT, rt})
+  end
 
   def init(init) do
     {:ok, []}

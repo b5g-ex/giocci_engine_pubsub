@@ -17,6 +17,14 @@ defmodule CountQueue do
   end
 
 
+  def count_process do
+    process = :cpu_sup.
+  end
+  def update_process_number(number)do
+    clock = DateTime.utc_now()
+    GenServer.cast(GiocciEnginePubsub,{:update_process_number, number, clock})
+  end
+
 
 
 end

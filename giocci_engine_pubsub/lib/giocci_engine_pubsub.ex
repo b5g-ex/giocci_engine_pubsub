@@ -27,6 +27,7 @@ defmodule GiocciEnginePubsub do
   end
   def publish(session, msg)do
     {:ok, publisher} = Session.declare_publisher(session, "to/faal")
+    msg = GenServer.call(GiocciEnginePubsub,:check_status)
     Publisher.put(publisher, msg)
   end
 
@@ -86,6 +87,10 @@ defmodule GiocciEnginePubsub do
     {:noreply, new_state}
   end
 
+  def handle_cast({:update_process_number,process_number,clock}, state) do
+    new_state = %GiocciEnginePubsub{state | process_number: %{process_number: process_number, clock: clock}}
+    {:noreply, new_state}
+  end
 
   def handle_call(:check_status, from, state) do
     {:reply, state,state}
