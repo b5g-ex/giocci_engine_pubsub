@@ -18,7 +18,7 @@ defmodule CountQueue do
 
 
   def count_process do
-    process = :cpu_sup.
+    # process = :cpu_sup.
   end
   def update_process_number(number)do
     clock = DateTime.utc_now()

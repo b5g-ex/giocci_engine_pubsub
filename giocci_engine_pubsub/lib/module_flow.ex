@@ -1,5 +1,13 @@
 defmodule ModuleFlow do
 
+  def start_timemeasurment do
+    start_clo =  DateTime.utc_now()
+  end
+
+
+  def finish_timemeasurment do
+    finish_clo =  DateTime.utc_now()
+  end
 
 
   def  get_task(dummy,dummy2) do
@@ -7,6 +15,8 @@ defmodule ModuleFlow do
     data = dummy2
 
   end
+
+
 
 
   def do_task(climodule,clidata) do
@@ -18,7 +28,7 @@ defmodule ModuleFlow do
     processing_time = DateTime.diff(finish_clock, start_clock, :microsecond)
     # processing_time = 10000000
     # GenServer.cast(CountRT, {:send_RT,processing_time})
-    CountRT.send_RT()
+    CountRT.send_RT(processing_time)
 
 
   end

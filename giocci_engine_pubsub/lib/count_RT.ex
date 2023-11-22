@@ -18,7 +18,7 @@ defmodule CountRT do
 
   def update_countRT do
     clock = DateTime.utc_now()
-    processing_time = 10000
+    processing_time = GenServer.call(CountRT,:check_RT)
     GenServer.cast(GiocciEnginePubsub,{:update_RT,processing_time,clock})
   end
 
@@ -36,7 +36,7 @@ defmodule CountRT do
     GenServer.start_link(__MODULE__, state, name: __MODULE__)
   end
 
-  def send_RT do
+  def send_RT(rt) do
     GenServer.call(CountRT,{:send_RT, rt})
   end
 
@@ -49,5 +49,10 @@ defmodule CountRT do
     {:noreply, new_rt}
   end
 
-
+  def handle_cast({:send_RT2, new_rt}, rt) do
+    {:noreply, new_rt}
+  end
+  def handle_call(:check_RT, from,rt) do
+    {:reply, rt,rt}
+  end
 end

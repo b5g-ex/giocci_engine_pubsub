@@ -88,7 +88,7 @@ defmodule GiocciEnginePubsub do
   end
 
   def handle_cast({:update_process_number,process_number,clock}, state) do
-    new_state = %GiocciEnginePubsub{state | process_number: %{process_number: process_number, clock: clock}}
+    new_state = %GiocciEnginePubsub{state | queue_number: %{queue_number: process_number, clock: clock}}
     {:noreply, new_state}
   end
 
