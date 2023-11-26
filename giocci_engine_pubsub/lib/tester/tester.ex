@@ -23,7 +23,7 @@ defmodule Tester.Tester do
   def tester2 do
 
     GiocciEnginePubsub.start_engine_pubsub()
-    GiocciEnginePubsub.start_link()
+    GiocciEnginePubsub.start_link(1000)
     # CountQueue.start_link()
     CountRT.start_link()
 

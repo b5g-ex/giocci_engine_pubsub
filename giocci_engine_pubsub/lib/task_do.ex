@@ -16,6 +16,8 @@ defmodule TaskDo do
 
   def main do
     client_data=load_task()
+
+
     start_clock = start_timemeasurment()
     Process.sleep(1000)
     finish_clock = finish_timemeasurment()

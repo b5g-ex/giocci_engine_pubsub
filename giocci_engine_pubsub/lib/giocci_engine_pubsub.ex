@@ -51,15 +51,15 @@ defmodule GiocciEnginePubsub do
     IO.puts(m)
     # return_publish(session)
   end
-  def getting_linux_meminfo() do
-    # session = Zenohex.open
-    # [memtotal, memfree |other ] = LinuxStatuRead.get_linux_meminfo()
-    # memtotal
-    # # memfree
-    # clock = DateTime.utc_now()
-    # %GiocciEnginePubsub{Linux_info: [memtotal, memfree, clock]}
-    # publish(session,memtotal <> "," <>  memfree)
-  end
+  # def getting_linux_meminfo() do
+  #   # session = Zenohex.open
+  #   # [memtotal, memfree |other ] = LinuxStatuRead.get_linux_meminfo()
+  #   # memtotal
+  #   # # memfree
+  #   # clock = DateTime.utc_now()
+  #   # %GiocciEnginePubsub{Linux_info: [memtotal, memfree, clock]}
+  #   # publish(session,memtotal <> "," <>  memfree)
+  # end
 
   def start_link(state) do
     GenServer.start_link(__MODULE__, state, name: __MODULE__)
