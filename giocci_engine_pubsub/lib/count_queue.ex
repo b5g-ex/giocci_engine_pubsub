@@ -13,8 +13,8 @@ defmodule CountQueue do
   def main do
     number = count_queue()
     update_queue_number(number)
-    Process.sleep(3000)
-    spawn(main)
+    Process.sleep(1500)
+    main()
   end
 
 

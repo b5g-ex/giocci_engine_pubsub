@@ -16,8 +16,8 @@ defmodule LinuxStatusRead do
 
     clock = DateTime.utc_now()
     GenServer.cast(GiocciEnginePubsub,{:update_linux_data,memtotal,memfree,clock})
-    Process.sleep(5000)
-    spawn(get_linux_meminfo)
+    Process.sleep(2000)
+    get_linux_meminfo()
   end
 
 end

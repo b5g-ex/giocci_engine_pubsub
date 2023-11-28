@@ -27,8 +27,10 @@ defmodule GiocciEnginePubsub do
   end
   def publish(session, msg)do
     {:ok, publisher} = Session.declare_publisher(session, "to/faal")
+    # msg = GenServer.call(GiocciEnginePubsub,:check_status)
+    # Publisher.put(publisher, msg)
     msg = GenServer.call(GiocciEnginePubsub,:check_status)
-    Publisher.put(publisher, msg)
+    Publisher.put(publisher, msg |> :erlang.term_to_binary |> Base.encode64)
   end
 
   # def subscribe do

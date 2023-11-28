@@ -49,9 +49,18 @@ defmodule CountRT do
     {:noreply, new_rt}
   end
 
-  def handle_cast({:send_RT2, new_rt}, rt) do
+  def handle_cast({:send_startRT, start_rt, name}, rt_list) do
+    new_rt = [%{name: name, start_rt: start_rt, finish_rt: nil} |rt_list]
     {:noreply, new_rt}
   end
+
+
+  def handle_cast({:send_finishRT, finish_rt, name}, rt) do
+    new_rt = %{name: name, finish_rt: finish_rt}
+    {:noreply, new_rt}
+  end
+
+
   def handle_call(:check_RT, from,rt) do
     {:reply, rt,rt}
   end
