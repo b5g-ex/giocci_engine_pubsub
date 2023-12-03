@@ -8,7 +8,7 @@ defmodule CountQueue do
 
   def update_queue_number(number)do
     clock = DateTime.utc_now()
-    GenServer.cast(GiocciEnginePubsub,{:update_queue_number, number, clock})
+    GenServer.cast(GiocciEngineStatus,{:update_queue_number, number, clock})
   end
   def main do
     number = count_queue()
@@ -23,7 +23,7 @@ defmodule CountQueue do
   end
   def update_process_number(number)do
     clock = DateTime.utc_now()
-    GenServer.cast(GiocciEnginePubsub,{:update_process_number, number, clock})
+    GenServer.cast(GiocciEngineStatus,{:update_process_number, number, clock})
   end
 
 

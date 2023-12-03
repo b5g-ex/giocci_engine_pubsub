@@ -9,8 +9,8 @@ defmodule Tester.Tester do
     GenServer.call(TaskQueue,{:push_newtask,1000})
     GenServer.call(TaskQueue,{:push_newtask,1000})
     TaskDo.main()
-    LinuxStatusRead.get_linux_meminfo()
-    CountQueue.main()
+    # LinuxStatusRead.get_linux_meminfo()
+    # CountQueue.main()
     CountRT.update_countRT
     GenServer.call(GiocciEnginePubsub,:check_status)
 
@@ -27,7 +27,7 @@ defmodule Tester.Tester do
     # CountQueue.start_link()
     CountRT.start_link()
 
-    ModuleFlow.do_task()
+    SigotoFlow.do_task()
 
     LinuxStatusRead.get_linux_meminfo()
     CountQueue.count_process()

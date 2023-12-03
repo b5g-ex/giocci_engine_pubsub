@@ -19,7 +19,7 @@ defmodule CountRT do
   def update_countRT do
     clock = DateTime.utc_now()
     processing_time = GenServer.call(CountRT,:check_RT)
-    GenServer.cast(GiocciEnginePubsub,{:update_RT,processing_time,clock})
+    GenServer.cast(GiocciEngineStatus,{:update_RT,processing_time,clock})
   end
 
   # def handle_cast({:reserve_start_utc,start_time}, before_data) do
@@ -55,11 +55,18 @@ defmodule CountRT do
   end
 
 
+  # def handle_cast({:send_finishRT, finish_rt, name}, rt) do
+  #   new_rt = %{name: name, finish_rt: finish_rt}
+  #   {:noreply, new_rt}
+  # end
+
   def handle_cast({:send_finishRT, finish_rt, name}, rt) do
-    new_rt = %{name: name, finish_rt: finish_rt}
+    target_index = Enum.find_index(rt, fn rt -> rt.name == name end)
+    target_rt = Enum.at(rt, target_index)
+    replaced_rt = %{target_rt | finish_rt: finish_rt}
+    new_rt = List.replace_at(rt_list, target_index, replaced_rt)
     {:noreply, new_rt}
   end
-
 
   def handle_call(:check_RT, from,rt) do
     {:reply, rt,rt}

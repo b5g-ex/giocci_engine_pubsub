@@ -15,7 +15,7 @@ defmodule LinuxStatusRead do
     # |> List.keyfind(:MemFree,0)
 
     clock = DateTime.utc_now()
-    GenServer.cast(GiocciEnginePubsub,{:update_linux_data,memtotal,memfree,clock})
+    GenServer.cast(GiocciEngineStatus,{:update_linux_data,memtotal,memfree,clock})
     Process.sleep(2000)
     get_linux_meminfo()
   end

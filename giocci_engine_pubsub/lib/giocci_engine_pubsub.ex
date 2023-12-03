@@ -14,22 +14,24 @@ defmodule GiocciEnginePubsub do
       :world
 
   """
-  defstruct [:queue_number ,:RT ,:linux_info ]
+
 
   def start_engine_pubsub do
 
     session = Zenohex.open
+    GenServer.cast()
     Session.declare_subscriber(session, "to/engine", fn m-> callback(m,session) end)
     Session.declare_subscriber(session, "return_ftom/engine", fn m-> callbackrt(m,session) end)
 
     {:ok, publisher} = Session.declare_publisher(session, "to/faal")
     Publisher.put(publisher, "Hello zenoh?")
   end
-  def publish(session, msg)do
+  def publish(msg)do
+    session =GenServer.call(GiocciEnginePubsub,:call_session)
     {:ok, publisher} = Session.declare_publisher(session, "to/faal")
     # msg = GenServer.call(GiocciEnginePubsub,:check_status)
     # Publisher.put(publisher, msg)
-    msg = GenServer.call(GiocciEnginePubsub,:check_status)
+    msg = GenServer.call(GiocciEngineStatus,:check_status)
     Publisher.put(publisher, msg |> :erlang.term_to_binary |> Base.encode64)
   end
 
@@ -39,17 +41,18 @@ defmodule GiocciEnginePubsub do
 
   # end
 
-  def return_publish(session)do
+  def return_publish()do
+    session =GenServer.call(GiocciEnginePubsub,:call_session)
     {:ok, publisher} = Session.declare_publisher(session, "return_from/engine")
     Publisher.put(publisher, "received")
   end
 
-  defp callback(m,session) do
+  defp callback(m) do
     IO.puts(m)
-    return_publish(session)
+    return_publish()
   end
 
-  defp callbackrt(m,session) do
+  defp callbackrt(m) do
     IO.puts(m)
     # return_publish(session)
   end
@@ -63,40 +66,7 @@ defmodule GiocciEnginePubsub do
   #   # publish(session,memtotal <> "," <>  memfree)
   # end
 
-  def start_link(state) do
-    GenServer.start_link(__MODULE__, state, name: __MODULE__)
-  end
-  def init(initial) do
-    state = %GiocciEnginePubsub{}
-   {:ok, state}
-  end
 
-
-
-
-  def handle_cast({:update_linux_data,memtotal,memfree,clock}, state) do
-    new_state = %GiocciEnginePubsub{state | linux_info: %{memtotal: memtotal, memfree: memfree, clock: clock}}
-    {:noreply, new_state}
-  end
-
-  def handle_cast({:update_RT,processing_time,clock}, state) do
-    new_state = %GiocciEnginePubsub{state | RT: %{processing_time: processing_time, clock: clock}}
-    {:noreply, new_state}
-  end
-
-  def handle_cast({:update_queue_number,queue_number,clock}, state) do
-    new_state = %GiocciEnginePubsub{state | queue_number: %{queue_number: queue_number, clock: clock}}
-    {:noreply, new_state}
-  end
-
-  def handle_cast({:update_process_number,process_number,clock}, state) do
-    new_state = %GiocciEnginePubsub{state | queue_number: %{queue_number: process_number, clock: clock}}
-    {:noreply, new_state}
-  end
-
-  def handle_call(:check_status, from, state) do
-    {:reply, state,state}
-  end
   # def get_linux_meminfo() do
   #   File.read!("/proc/meminfo")
   #   |> String.split("\n", trim: true)
@@ -107,6 +77,16 @@ defmodule GiocciEnginePubsub do
   # |> String.split(["\n"," "])
 
 
+  def start_link(state) do
+    GenServer.start_link(__MODULE__, state, name: __MODULE__)
+  end
+  def init(session) do
+   {:ok, session}
+  end
+
+  def handle_call(:call_session, from, session) do
+    {:reply, session}
+  end
 
 
 
