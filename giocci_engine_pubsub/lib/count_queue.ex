@@ -1,5 +1,5 @@
 defmodule CountQueue do
-  # use GenServer
+  use GenServer
 
   def count_queue do
     queue_number = GenServer.call(TaskQueue,:remaining_task)
@@ -27,5 +27,21 @@ defmodule CountQueue do
   end
 
 
+
+
+
+  def start_link(state) do
+    GenServer.start_link(__MODULE__, state, name: __MODULE__)
+  end
+
+
+  def init(init) do
+
+    {:ok, []}
+  end
+  def handle_cast(:start, state) do
+    main()
+    {:noreply,state}
+  end
 
 end

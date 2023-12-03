@@ -60,13 +60,21 @@ defmodule CountRT do
   #   {:noreply, new_rt}
   # end
 
-  def handle_cast({:send_finishRT, finish_rt, name}, rt) do
-    target_index = Enum.find_index(rt, fn rt -> rt.name == name end)
-    target_rt = Enum.at(rt, target_index)
+  # def handle_cast({:send_finishRT, finish_rt, name}, rt) do
+  #   target_index = Enum.find_index(rt, fn rt -> rt.name == name end)
+  #   target_rt = Enum.at(rt, target_index)
+  #   replaced_rt = %{target_rt | finish_rt: finish_rt}
+  #   new_rt = List.replace_at(rt_list, target_index, replaced_rt)
+  #   {:noreply, new_rt}
+  # end
+  def handle_cast({:send_finishRT, finish_rt, name}, rt_list) do
+    target_index = Enum.find_index(rt_list, fn rt_list -> rt_list.name == name end)
+    target_rt = Enum.at(rt_list, target_index)
     replaced_rt = %{target_rt | finish_rt: finish_rt}
     new_rt = List.replace_at(rt_list, target_index, replaced_rt)
     {:noreply, new_rt}
   end
+
 
   def handle_call(:check_RT, from,rt) do
     {:reply, rt,rt}

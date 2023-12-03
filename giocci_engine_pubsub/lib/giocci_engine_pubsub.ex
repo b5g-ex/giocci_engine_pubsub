@@ -19,14 +19,14 @@ defmodule GiocciEnginePubsub do
   def start_engine_pubsub do
 
     session = Zenohex.open
-    GenServer.cast()
-    Session.declare_subscriber(session, "to/engine", fn m-> callback(m,session) end)
-    Session.declare_subscriber(session, "return_ftom/engine", fn m-> callbackrt(m,session) end)
+    start_link(session)
+    Session.declare_subscriber(session, "to/engine", fn m-> callback(m) end)
+    Session.declare_subscriber(session, "return_ftom/engine", fn m-> callbackrt(m) end)
 
     {:ok, publisher} = Session.declare_publisher(session, "to/faal")
     Publisher.put(publisher, "Hello zenoh?")
   end
-  def publish(msg)do
+  def publish()do
     session =GenServer.call(GiocciEnginePubsub,:call_session)
     {:ok, publisher} = Session.declare_publisher(session, "to/faal")
     # msg = GenServer.call(GiocciEnginePubsub,:check_status)
@@ -85,7 +85,7 @@ defmodule GiocciEnginePubsub do
   end
 
   def handle_call(:call_session, from, session) do
-    {:reply, session}
+    {:reply, session,session}
   end
 
 

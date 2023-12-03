@@ -1,4 +1,5 @@
 defmodule LinuxStatusRead do
+  GenServer
   # def send_linux_meminfo() do
   #   session = Zenohex.open
   #   [memtotal, memfree |other ]=get_linux_meminfo()
@@ -18,6 +19,22 @@ defmodule LinuxStatusRead do
     GenServer.cast(GiocciEngineStatus,{:update_linux_data,memtotal,memfree,clock})
     Process.sleep(2000)
     get_linux_meminfo()
+  end
+
+
+
+  def start_link(state) do
+    GenServer.start_link(__MODULE__, state, name: __MODULE__)
+  end
+
+
+  def init(init) do
+
+    {:ok, []}
+  end
+  def handle_cast(:start, state) do
+    get_linux_meminfo()
+    {:noreply,state}
   end
 
 end
