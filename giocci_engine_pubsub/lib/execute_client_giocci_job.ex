@@ -1,8 +1,10 @@
-defmodule TaskDo do
+defmodule ExecuteClientGiocciJob do
   use GenServer
 
   def load_task do
     data = GenServer.call(TaskQueue,:get_newtask)
+    execute_job(data)
+    load_task()
   end
 
   def start_timemeasurment do
@@ -14,16 +16,34 @@ defmodule TaskDo do
     finish_clo =  DateTime.utc_now()
   end
 
-  def main do
-    client_data=load_task()
+  def execute_job (data)do
+    client_data=data
 
 
     start_clock = start_timemeasurment()
-    Process.sleep(1000)
+    Process.sleep(10000)
     finish_clock = finish_timemeasurment()
     processing_time = DateTime.diff(finish_clock, start_clock, :microsecond)
-    # processing_time = 10000000
     GenServer.cast(CountRT, {:send_RT,processing_time})
 
+
+
   end
+
+
+
+
+  def start_link(state) do
+    GenServer.start_link(__MODULE__, state, name: __MODULE__)
+  end
+
+  def init(init) do
+    {:ok, []}
+  end
+
+  def handle_cast(:start, state) do
+    load_task()
+    {:noreply,state}
+  end
+
 end

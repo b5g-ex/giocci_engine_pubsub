@@ -1,34 +1,9 @@
 defmodule TaskQueue do
   use GenServer
 
-
-  # def init(init) do
-  #   queue=:queue.new
-  #   {:ok, queue}
-
-  # end
-
-  # def handle_call(:get_newtask,from, queue)do
-
-  #   {task, queue} = :queue.out(queue)
-  #   {:reply, task, queue}
-  # end
-
-  # def handle_call(:push_newtask,from, queue)do
-
-  #   {task, queue} = :queue.in(queue)
-  #   {:reply, task, queue}
-  # end
-
-  # def handle_info(:get_status, queue) do
-  #   {:reply, queue}
-
-  # enda
   def start_link(state) do
     GenServer.start_link(__MODULE__, state, name: __MODULE__)
   end
-
-
 
   def init(init) do
     {:ok, []}
@@ -47,14 +22,9 @@ defmodule TaskQueue do
   end
   def handle_call(:remaining_task, from, queue) do
     number = queue |> Enum.count
-    # number = 100
     {:reply,number, queue}
   end
 
-  # def handle_info(:get_status, queue) do
-  #   {:reply, queue}
-
-  # end
 
 
 end

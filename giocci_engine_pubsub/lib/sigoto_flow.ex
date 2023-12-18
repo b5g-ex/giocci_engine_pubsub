@@ -10,19 +10,11 @@ defmodule SigotoFlow do
   end
 
 
-  # def  get_task(dummy,dummy2) do
-  #   module = dummy
-  #   data = dummy2
-  #   spawn(do_task(module,data))
-  #   Process.sleep(10000)
-  #   spawn(get_task(dummy,dummy2))
-
-  # end
   def  get_task() do
 
     data = GenServer.call(TaskQueue,:get_newtask)
 
-    spawn(do_task(data))
+    spawn(execute_job(data))
     Process.sleep(10000)
     spawn(get_task())
 
@@ -30,7 +22,7 @@ defmodule SigotoFlow do
 
 
 
-  def do_task(data) do
+  def execute_job(data) do
     name = "test"
     start_clock = start_timemeasurment()
     CountRT.send_startRT(start_clock,name)
