@@ -36,13 +36,12 @@ defmodule ExecuteClientGiocciJob do
   def start_link(state) do
     GenServer.start_link(__MODULE__, state, name: __MODULE__)
   end
-
   def init(init) do
     {:ok, []}
   end
 
   def handle_cast(:start, state) do
-    load_task()
+    Stream.unfold(0,load_task())
     {:noreply,state}
   end
 
