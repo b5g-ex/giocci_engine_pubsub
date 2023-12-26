@@ -1,5 +1,8 @@
 defmodule CountRT do
   use GenServer
+  @moduledoc """
+  各jobの実行開始時刻と終了時刻を保存しGiocciEngineStatusに送信します
+  """
 
   def update_countRT do
     clock = DateTime.utc_now()

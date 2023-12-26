@@ -1,5 +1,8 @@
 defmodule GiocciEngineStatus do
   GenServer
+  @moduledoc """
+  Engineで取得した各種データを保管します
+  """
 
   defstruct [:queue_number, :RT, :linux_info]
 

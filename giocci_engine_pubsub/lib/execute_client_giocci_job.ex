@@ -1,8 +1,13 @@
 defmodule ExecuteClientGiocciJob do
   use GenServer
+  @moduledoc """
+  ジョブを実行する関数です。現在はダミーのジョブがあります。
+  またjob_queueからジョブを読み込む機能と、実行時間を測定する機能が含まれています
+
+  """
 
   def load_task(n) do
-    data = GenServer.call(TaskQueue, :get_newtask)
+    data = GenServer.call(JobQueue, :get_newtask)
     execute_job(data)
     load_task(n)
   end

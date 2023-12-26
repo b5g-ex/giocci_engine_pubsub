@@ -1,6 +1,10 @@
 defmodule LinuxStatusRead do
   GenServer
 
+  @moduledoc """
+  Linuxのシステムデータを読み込みます
+  """
+
   def get_linux_meminfo() do
     [memtotal, memfree | other] =
       File.read!("/proc/meminfo")

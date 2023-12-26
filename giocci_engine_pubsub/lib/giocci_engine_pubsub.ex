@@ -3,17 +3,10 @@ defmodule GiocciEnginePubsub do
 
   @moduledoc """
   Documentation for `GiocciEnginePubsub`.
+  EngineとFaal間のpubsubを行います
   """
 
-  @doc """
-  Hello world.
 
-  ## Examples
-
-      iex> GiocciEnginePubsub.hello()
-      :world
-
-  """
 
   def start_engine_pubsub do
     session = Zenohex.open()

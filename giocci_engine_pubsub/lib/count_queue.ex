@@ -1,8 +1,12 @@
 defmodule CountQueue do
   use GenServer
 
+  @moduledoc """
+  job_queueの中にあるジョブの数を数えます
+  """
+
   def count_queue do
-    queue_number = GenServer.call(TaskQueue, :remaining_task)
+    queue_number = GenServer.call(JobQueue, :remaining_task)
   end
 
   def update_queue_number(number) do
