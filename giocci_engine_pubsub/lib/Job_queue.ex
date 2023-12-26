@@ -1,5 +1,9 @@
-defmodule TaskQueue do
+defmodule JobQueue do
   use GenServer
+
+  @moduledoc """
+  clientからのjobを保管します
+  """
 
   def start_link(state) do
     GenServer.start_link(__MODULE__, state, name: __MODULE__)
