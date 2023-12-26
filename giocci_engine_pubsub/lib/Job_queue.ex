@@ -9,11 +9,11 @@ defmodule JobQueue do
     GenServer.start_link(__MODULE__, state, name: __MODULE__)
   end
 
-  def init(init) do
+  def init(_init) do
     {:ok, []}
   end
 
-  def handle_call(:get_newtask, from, queue) do
+  def handle_call(:get_newtask, _from, queue) do
     head = []
     tail = []
 
@@ -29,12 +29,12 @@ defmodule JobQueue do
     {:reply, head, tail}
   end
 
-  def handle_call({:push_newtask, newtask}, from, queue) do
+  def handle_call({:push_newtask, newtask}, _from, queue) do
     new_queue = queue ++ [newtask]
     {:reply, new_queue, new_queue}
   end
 
-  def handle_call(:remaining_task, from, queue) do
+  def handle_call(:remaining_task, _from, queue) do
     number = queue |> Enum.count()
     {:reply, number, queue}
   end

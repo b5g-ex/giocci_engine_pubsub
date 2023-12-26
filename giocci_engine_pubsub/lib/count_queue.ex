@@ -36,7 +36,7 @@ defmodule CountQueue do
     GenServer.start_link(__MODULE__, state, name: __MODULE__)
   end
 
-  def init(init) do
+  def init(_init) do
     {:ok, []}
   end
 

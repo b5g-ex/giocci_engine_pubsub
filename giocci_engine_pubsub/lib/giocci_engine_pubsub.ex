@@ -48,7 +48,7 @@ defmodule GiocciEnginePubsub do
     {:ok, session}
   end
 
-  def handle_call(:call_session, from, session) do
+  def handle_call(:call_session, _from, session) do
     {:reply, session, session}
   end
 end

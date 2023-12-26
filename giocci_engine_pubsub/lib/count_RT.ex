@@ -40,7 +40,7 @@ defmodule CountRT do
     {:noreply, new_rt}
   end
 
-  def handle_call(:check_RT, from, rt) do
+  def handle_call(:check_RT, _from, rt) do
     {:reply, rt, rt}
   end
 end

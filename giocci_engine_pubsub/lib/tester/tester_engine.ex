@@ -24,7 +24,7 @@ defmodule Tester.TesterEngine do
 
   def tester_start do
     GiocciEngineStatus.start_link(1000)
-    TaskQueue.start_link(1000)
+    JobQueue.start_link(1000)
     CountRT.start_link(1000)
     ExecuteClientGiocciJob.start_link(1000)
     CountQueue.start_link(1000)
@@ -56,12 +56,16 @@ defmodule Tester.TesterEngine do
   def tester_execute_job do
     GenServer.cast(ExecuteClientGiocciJob, :start)
     # CountRT.update_countRT
-    GenServer.call(GiocciEngineStatus, :check_status)
+
   end
 
   def tester_pubsub do
     GiocciEnginePubsub.start_engine_pubsub()
     GiocciEnginePubsub.publish()
+  end
+
+  def tester_check_status do
+    GenServer.call(GiocciEngineStatus, :check_status)
   end
 
   def tester2 do
