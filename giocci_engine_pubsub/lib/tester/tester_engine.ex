@@ -7,23 +7,20 @@ defmodule Tester.TesterEngine do
     CountRT.start_link(1000)
     CountQueue.start_link(1000)
     LinuxStatusRead.start_link(1000)
-    GenServer.cast(CountQueue,:start)
-    GenServer.cast(LinuxStatusRead,:start)
-    GenServer.call(TaskQueue,{:push_newtask,1000})
-    GenServer.call(TaskQueue,{:push_newtask,1000})
-    GenServer.call(TaskQueue,{:push_newtask,1000})
-    GenServer.call(TaskQueue,{:push_newtask,1000})
+    GenServer.cast(CountQueue, :start)
+    GenServer.cast(LinuxStatusRead, :start)
+    GenServer.call(TaskQueue, {:push_newtask, 1000})
+    GenServer.call(TaskQueue, {:push_newtask, 1000})
+    GenServer.call(TaskQueue, {:push_newtask, 1000})
+    GenServer.call(TaskQueue, {:push_newtask, 1000})
     ExecuteClientGiocciJob.execute_job()
     # LinuxStatusRead.get_linux_meminfo()
     # CountQueue.main()
-    CountRT.update_countRT
-    GenServer.call(GiocciEngineStatus,:check_status)
-    GiocciEnginePubsub.start_engine_pubsub
+    CountRT.update_countRT()
+    GenServer.call(GiocciEngineStatus, :check_status)
+    GiocciEnginePubsub.start_engine_pubsub()
     GiocciEnginePubsub.publish()
-
   end
-
-
 
   def tester_start do
     GiocciEngineStatus.start_link(1000)
@@ -32,64 +29,60 @@ defmodule Tester.TesterEngine do
     ExecuteClientGiocciJob.start_link(1000)
     CountQueue.start_link(1000)
     LinuxStatusRead.start_link(1000)
-    GenServer.call(GiocciEngineStatus,:check_status)
-
+    GenServer.call(GiocciEngineStatus, :check_status)
   end
-
 
   def tester_start_cyclic_job do
-    GenServer.cast(CountQueue,:start)
-    GenServer.cast(LinuxStatusRead,:start)
-    GenServer.call(GiocciEngineStatus,:check_status)
+    GenServer.cast(CountQueue, :start)
+    GenServer.cast(LinuxStatusRead, :start)
+    GenServer.call(GiocciEngineStatus, :check_status)
   end
+
   def tester_push_job do
-    GenServer.call(TaskQueue,{:push_newtask,1000})
-    GenServer.call(TaskQueue,{:push_newtask,1000})
-    GenServer.call(TaskQueue,{:push_newtask,1000})
-    GenServer.call(TaskQueue,{:push_newtask,1000})
+    GenServer.call(TaskQueue, {:push_newtask, 1000})
+    GenServer.call(TaskQueue, {:push_newtask, 1000})
+    GenServer.call(TaskQueue, {:push_newtask, 1000})
+    GenServer.call(TaskQueue, {:push_newtask, 1000})
+    GenServer.call(TaskQueue, {:push_newtask, 1000})
+    GenServer.call(TaskQueue, {:push_newtask, 1000})
+    GenServer.call(TaskQueue, {:push_newtask, 1000})
+    GenServer.call(TaskQueue, {:push_newtask, 1000})
+    GenServer.call(TaskQueue, {:push_newtask, 1000})
+    GenServer.call(TaskQueue, {:push_newtask, 1000})
+    GenServer.call(TaskQueue, {:push_newtask, 1000})
+    GenServer.call(TaskQueue, {:push_newtask, 1000})
   end
 
   def tester_execute_job do
-    GenServer.cast(ExecuteClientGiocciJob,:start)
-    CountRT.update_countRT
-    GenServer.call(GiocciEngineStatus,:check_status)
+    GenServer.cast(ExecuteClientGiocciJob, :start)
+    # CountRT.update_countRT
+    GenServer.call(GiocciEngineStatus, :check_status)
   end
 
-
   def tester_pubsub do
-    GiocciEnginePubsub.start_engine_pubsub
+    GiocciEnginePubsub.start_engine_pubsub()
     GiocciEnginePubsub.publish()
   end
 
-
-
-
-
-
-
   def tester2 do
-
     GiocciEnginePubsub.start_link(1000)
     GiocciEngineStatus.start_link(1000)
     TaskQueue.start_link(1000)
     CountRT.start_link(1000)
     CountQueue.start_link(1000)
     LinuxStatusRead.start_link(1000)
-    GenServer.cast(CountQueue,:start)
-    GenServer.cast(LinuxStatusRead,:start)
-    GenServer.call(TaskQueue,{:push_newtask,1000})
-    GenServer.call(TaskQueue,{:push_newtask,1000})
-    GenServer.call(TaskQueue,{:push_newtask,1000})
-    GenServer.call(TaskQueue,{:push_newtask,1000})
-
+    GenServer.cast(CountQueue, :start)
+    GenServer.cast(LinuxStatusRead, :start)
+    GenServer.call(TaskQueue, {:push_newtask, 1000})
+    GenServer.call(TaskQueue, {:push_newtask, 1000})
+    GenServer.call(TaskQueue, {:push_newtask, 1000})
+    GenServer.call(TaskQueue, {:push_newtask, 1000})
 
     SigotoFlow.do_task()
-
 
     CountQueue.count_process()
     CountQueue.update_process_number()
 
     # GiocciEnginePubsub.publish(session)
   end
-
 end

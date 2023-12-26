@@ -7,24 +7,31 @@ defmodule TaskQueue do
 
   def init(init) do
     {:ok, []}
-
   end
 
-  def handle_call(:get_newtask,from, queue)do
+  def handle_call(:get_newtask, from, queue) do
+    head = []
+    tail = []
 
-    [head | tail]= queue
+    case [] do
+      ^queue ->
+        head = []
+        tail = []
+
+      _ ->
+        [head | tail] = queue
+    end
+
     {:reply, head, tail}
   end
 
-  def handle_call({:push_newtask,newtask},from, queue)do
+  def handle_call({:push_newtask, newtask}, from, queue) do
     new_queue = queue ++ [newtask]
     {:reply, new_queue, new_queue}
   end
+
   def handle_call(:remaining_task, from, queue) do
-    number = queue |> Enum.count
-    {:reply,number, queue}
+    number = queue |> Enum.count()
+    {:reply, number, queue}
   end
-
-
-
 end
