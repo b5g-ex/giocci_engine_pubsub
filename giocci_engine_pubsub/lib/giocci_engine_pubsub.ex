@@ -11,34 +11,44 @@ defmodule GiocciEnginePubsub do
   def start_engine_pubsub do
     session = Zenohex.open()
     start_link(session)
-    Session.declare_subscriber(session, "to/engine", fn m -> callback(m) end)
-
-    {:ok, publisher} = Session.declare_publisher(session, "to/faal")
+    Session.declare_subscriber(session, "from/faal", fn m -> callback(m) end)
+    Session.declare_subscriber(session, "from/client", fn m -> callbackcl(m) end)
+    {:ok, publisher} = Session.declare_publisher(session, "from/engine")
     # Publisher.put(publisher, "zenoh")
   end
 
   def publish() do
     session = GenServer.call(GiocciEnginePubsub, :call_session)
-    {:ok, publisher} = Session.declare_publisher(session, "to/faal")
+    {:ok, publisher} = Session.declare_publisher(session, "from/engine")
     msg = GenServer.call(GiocciEngineStatus, :check_status)
     Publisher.put(publisher, msg |> :erlang.term_to_binary() |> Base.encode64())
   end
 
-  def return_publish() do
-    session = GenServer.call(GiocciEnginePubsub, :call_session)
-    {:ok, publisher} = Session.declare_publisher(session, "return_from/engine")
-    Publisher.put(publisher, "received")
-  end
+  # def return_publish() do
+  #   session = GenServer.call(GiocciEnginePubsub, :call_session)
+  #   {:ok, publisher} = Session.declare_publisher(session, "return_from/engine")
+  #   Publisher.put(publisher, "received")
+  # end
 
   defp callback(m) do
-    IO.puts(m)
-    return_publish()
+    msg = m |> String.trim
+            |> Base.decode64!
+            |> String.trim
+            |> :erlang.binary_to_term
+    IO.inspect(msg)
   end
+  defp callbackcl(m) do
+    msg = m |> String.trim
+            |> Base.decode64!
+            |> String.trim
+            |> :erlang.binary_to_term
+    IO.inspect(msg)
 
-  defp callbackrt(m) do
-    IO.puts(m)
-    # return_publish(session)
   end
+  # defp callbackrt(m) do
+  #   IO.puts(m)
+  #   # return_publish(session)
+  # end
 
   def start_link(state) do
     GenServer.start_link(__MODULE__, state, name: __MODULE__)
