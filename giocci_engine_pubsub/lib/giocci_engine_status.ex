@@ -10,7 +10,7 @@ defmodule GiocciEngineStatus do
     GenServer.start_link(__MODULE__, state, name: __MODULE__)
   end
 
-  def init(initial) do
+  def init(_initial) do
     state = %GiocciEngineStatus{}
     {:ok, state}
   end
@@ -47,7 +47,7 @@ defmodule GiocciEngineStatus do
     {:noreply, new_state}
   end
 
-  def handle_call(:check_status, from, state) do
+  def handle_call(:check_status, _from, state) do
     {:reply, state, state}
   end
 end

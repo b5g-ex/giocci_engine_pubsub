@@ -7,7 +7,7 @@ defmodule ClientSimulatorGenerateJob do
 
 
   def generate_client_job() do
-    GenServer.call(ClientSimulatorGenerateJob, {:push_newtask, [module,func_flow,data]})
+    GenServer.call(ClientSimulatorGenerateJob, {:push_newtask, ["module","func_flow","data"]})
     Process.sleep(5000)
     generate_client_job()
   end

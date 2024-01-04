@@ -7,7 +7,7 @@ defmodule SigotoFlow do
   #   finish_clo = DateTime.utc_now()
   # end
 
-  def load_task() do
+  def get_task() do
     data = GenServer.call(TaskQueue, :get_newtask)
 
     spawn(execute_job(data))

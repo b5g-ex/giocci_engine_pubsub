@@ -6,7 +6,7 @@ defmodule LinuxStatusRead do
   """
 
   def get_linux_meminfo() do
-    [memtotal, memfree | other] =
+    [memtotal, memfree | _other] =
       File.read!("/proc/meminfo")
       |> String.split("\n", trim: true)
       |> List.delete(" ")
