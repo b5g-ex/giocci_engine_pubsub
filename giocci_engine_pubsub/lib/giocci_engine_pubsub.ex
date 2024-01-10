@@ -43,7 +43,7 @@ defmodule GiocciEnginePubsub do
             |> String.trim
             |> :erlang.binary_to_term
     IO.inspect(msg)
-
+    ClientJobFlow.load_task(msg)
   end
   # defp callbackrt(m) do
   #   IO.puts(m)

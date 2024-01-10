@@ -13,8 +13,31 @@ defmodule ClientSimulatorPubsub do
 
   def publish() do
     session = GenServer.call(ClientSimulatorPubsub, :call_session)
-    {:ok, publisher} = Session.declare_publisher(session, "from/engine")
-    msg =GenServer.call(ClientSimulatorGenerateJob, :get_task)
+    {:ok, publisher} = Session.declare_publisher(session, "from/client")
+    # msg =GenServer.call(ClientSimulatorGenerateJob, :get_task)
+    testmodule = :code.get_object_code(defmodule inc mul2 do
+      def inc (x) do
+       ans = x +1
+      end
+      def mul2(x) do
+      ans = x*2
+      end
+      end
+      )
+    # msg = ["defmodule inc_mul2 do
+    #   def inc (x) do
+    #    ans = x +1
+    #   end
+    #   def mul2(x) do
+    #   ans = x*2
+    #   end
+    #   end" ,
+    #   "fn (data)->
+    #   data |>inc |>mul2
+    #   end",
+    #   [1,2,4,2,5]]
+    msg = [testmodule,fn (data)-> data |>inc |>mul2 end,[1,2,4,2,5]]
+
     Publisher.put(publisher, msg |> :erlang.term_to_binary() |> Base.encode64())
   end
 
