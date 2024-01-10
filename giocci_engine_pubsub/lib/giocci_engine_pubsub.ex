@@ -38,10 +38,11 @@ defmodule GiocciEnginePubsub do
     IO.inspect(msg)
   end
   defp callbackcl(m) do
-    msg = m |> String.trim
-            |> Base.decode64!
-            |> String.trim
-            |> :erlang.binary_to_term
+    # msg = m |> String.trim
+    #         |> Base.decode64!
+    #         |> String.trim
+    #         |> :erlang.binary_to_term
+    msg = m
     IO.inspect(msg)
     ClientJobFlow.load_task(msg)
   end
