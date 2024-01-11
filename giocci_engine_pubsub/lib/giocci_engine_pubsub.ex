@@ -24,6 +24,15 @@ defmodule GiocciEnginePubsub do
     Publisher.put(publisher, msg |> :erlang.term_to_binary() |> Base.encode64())
   end
 
+  def publishcl(msg) do
+    # IO.inspect(msg)
+    session = GenServer.call(GiocciEnginePubsub, :call_session)
+    {:ok, publisher} = Session.declare_publisher(session, "from/engine2client")
+    # IO.inspect(msg)
+
+    Publisher.put(publisher, msg |> :erlang.term_to_binary() |> Base.encode64())
+  end
+
   # def return_publish() do
   #   session = GenServer.call(GiocciEnginePubsub, :call_session)
   #   {:ok, publisher} = Session.declare_publisher(session, "return_from/engine")
@@ -38,13 +47,21 @@ defmodule GiocciEnginePubsub do
     IO.inspect(msg)
   end
   defp callbackcl(m) do
-    # msg = m |> String.trim
-    #         |> Base.decode64!
-    #         |> String.trim
-    #         |> :erlang.binary_to_term
-    msg = m
-    IO.inspect(msg)
+    msg = m |> String.trim
+            |> Base.decode64!
+            |> String.trim
+            |> :erlang.binary_to_term
+    # msg = m
+    # IO.inspect(msg)
     ClientJobFlow.load_task(msg)
+  end
+
+  def call(m)do
+    msg = m |> String.trim
+            |> Base.decode64!
+            |> String.trim
+            |> :erlang.binary_to_term
+    IO.inspect(msg)
   end
   # defp callbackrt(m) do
   #   IO.puts(m)

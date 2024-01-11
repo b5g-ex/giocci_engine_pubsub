@@ -7,17 +7,20 @@ defmodule ClientJobFlow do
   #   finish_clo = DateTime.utc_now()
   # end
 
-  def load_task(job) do
-    [mod_encoded, flow, data] =job
+  def load_task([mod_encoded, flow, data]) do
+    # [mod_encoded, flow, data]
     module = decode_module(mod_encoded)
-    {name, bin, path}=Base.decode64!(mod_encoded)|>:erlang.binary_to_term()
-    :code.load_binary(name, path, bin)
+    # IO.inspect([module,flow,data])
+    # {name, bin, path}=Base.decode64!(mod_encoded)|>:erlang.binary_to_term()
+    # :code.load_binary(name, path, bin)
 
-    spawn(execute_job(flow,data))
+    execute_job(flow,data)
   end
   def decode_module(module) do
 
-    {name, bin, path}=:code.load_binary(module)
+    {name, bin, path}=Base.decode64!(module)|>:erlang.binary_to_term
+
+    :code.load_binary(name, path, bin)
 
   end
 
@@ -31,21 +34,26 @@ defmodule ClientJobFlow do
 
   def execute_job(flow,data) do
     name = "test"
-    IO.inspect(flow)
+    # IO.inspect(flow)
     start_clock =DateTime.utc_now()
     # [module | left_job] =job
     # [flow |data ] = left_job
     # read_module_func(module)
     # read_module_func(flow)
     # data = flow(data)
-    Enum.map(data, flow)
 
 
+    # IO.inspect(data)
+    # IO.inspect(flow)
 
-    CountRT.send_startRT(start_clock, name)
-    Process.sleep(1000)
+    # CountRT.send_startRT(start_clock, name)
+    answer = Enum.map(data, flow)
+    IO.inspect(answer)
     finish_clock = DateTime.utc_now()
-    CountRT.send_finishRT(finish_clock, name)
+    processing_time = DateTime.diff(finish_clock, start_clock, :microsecond)
+    GenServer.cast(CountRT, {:send_RT, processing_time})
+    GiocciEnginePubsub.publishcl(answer)
+    # CountRT.send_finishRT(finish_clock, name)
     # processing_time = DateTime.diff(finish_clock, start_clock, :microsecond)
     # GenServer.cast(CountRT, {:send_RT,processing_time})
   end

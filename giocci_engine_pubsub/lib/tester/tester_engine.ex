@@ -35,7 +35,7 @@ defmodule Tester.TesterEngine do
   def tester_start_cyclic_job do
     GenServer.cast(CountQueue, :start)
     GenServer.cast(LinuxStatusRead, :start)
-    GenServer.call(GiocciEngineStatus, :check_status)
+    # GenServer.call(GiocciEngineStatus, :check_status)
   end
 
   def tester_push_job do

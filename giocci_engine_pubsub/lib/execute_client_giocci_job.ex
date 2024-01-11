@@ -40,7 +40,8 @@ defmodule ExecuteClientGiocciJob do
   end
 
   def handle_cast(:start, state) do
-    start_load()
+    # start_load()
+    load_task(1)
 
     # Stream.unfold(0, fn n -> load_task(n) end)
     {:noreply, state}

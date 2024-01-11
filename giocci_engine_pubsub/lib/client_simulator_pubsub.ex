@@ -7,37 +7,22 @@ defmodule ClientSimulatorPubsub do
   def start_client_pubsub do
     session = Zenohex.open()
     start_link(session)
-    Session.declare_subscriber(session, "from/engine", fn m -> callback(m) end)
+    Session.declare_subscriber(session, "from/engine2client", fn m -> callback(m) end)
     {:ok, publisher} = Session.declare_publisher(session, "from/client")
   end
 
   def publish() do
     session = GenServer.call(ClientSimulatorPubsub, :call_session)
-    {:ok, publisher} = Session.declare_publisher(session, "from/client")
-    # msg =GenServer.call(ClientSimulatorGenerateJob, :get_task)
-    testmodule = :code.get_object_code(defmodule IncMul2 do
-        def inc(x) do
-          ans = x+1
-        end
-        def mul2(x) do
-          ans2 = x+x
-        end
-      end
-      )|> :erlang.term_to_binary() |> Base.encode64()
-    # msg = ["defmodule Incmul2 do
-    #   def inc (x) do
-    #    ans = x +1
-    #   end
-    #   def mul2(x) do
-    #   ans = x*2
-    #   end
-    #   end" ,
-    #   "fn (data)->
-    #   data |>inc |>mul2
-    #   end",
-    #   [1,2,4,2,5]]
-    msg = [testmodule,fn (data)-> data |>ClientSimulatorPubsub.IncMul2.inc |>ClientSimulatorPubsub.IncMul2.mul2 end,[1,2,4,2,5]]
 
+    # msg =GenServer.call(ClientSimulatorGenerateJob, :get_task)
+    testmodule = :code.get_object_code(IncMul2)|> :erlang.term_to_binary() |> Base.encode64()
+
+    msg = [testmodule,fn (data)-> data |>IncMul2.inc |>IncMul2.mul2 end,[1,2,4,2,5]]
+    # msg = [1,2,3,4,5]
+    msg = msg |> :erlang.term_to_binary() |> Base.encode64()
+    # IO.inspect(msg)
+    {:ok, publisher} = Session.declare_publisher(session, "from/client")
+    # msg ="aa"
     Publisher.put(publisher, msg)
   end
 
@@ -63,8 +48,13 @@ defmodule ClientSimulatorPubsub do
     {:reply, session, session}
   end
 
-  defp callback(m) do
-    IO.puts(m)
+  def callback(m) do
+    msg = m |> String.trim
+            |> Base.decode64!
+            |> :erlang.binary_to_term
+    # msg = m
+    IO.inspect(msg)
+
     # return_publish()
   end
 end
