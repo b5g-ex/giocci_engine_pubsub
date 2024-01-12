@@ -7,20 +7,22 @@ defmodule ClientJobFlow do
   #   finish_clo = DateTime.utc_now()
   # end
 
-  def load_task([mod_encoded, flow, data]) do
+  def load_task([mod_encoded, data]) do
     # [mod_encoded, flow, data]
-    module = decode_module(mod_encoded)
+    name = decode_and_import_module(mod_encoded)
     # IO.inspect([module,flow,data])
     # {name, bin, path}=Base.decode64!(mod_encoded)|>:erlang.binary_to_term()
     # :code.load_binary(name, path, bin)
 
-    execute_job(flow,data)
+    # execute_job(flow,data)
+    execute_job(data,name)
   end
-  def decode_module(module) do
+  def decode_and_import_module(module) do
 
     {name, bin, path}=Base.decode64!(module)|>:erlang.binary_to_term
 
     :code.load_binary(name, path, bin)
+    module_name =name
 
   end
 
@@ -32,8 +34,8 @@ defmodule ClientJobFlow do
   #   IO.put("dummy function")
   # end
 
-  def execute_job(flow,data) do
-    name = "test"
+  def execute_job(data,name) do
+    # name = "test"
     # IO.inspect(flow)
     start_clock =DateTime.utc_now()
     # [module | left_job] =job
@@ -47,7 +49,7 @@ defmodule ClientJobFlow do
     # IO.inspect(flow)
 
     # CountRT.send_startRT(start_clock, name)
-    answer = Enum.map(data, flow)
+    answer = Enum.map(data, &name.flow/1)
     IO.inspect(answer)
     finish_clock = DateTime.utc_now()
     processing_time = DateTime.diff(finish_clock, start_clock, :microsecond)

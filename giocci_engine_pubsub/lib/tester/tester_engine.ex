@@ -3,7 +3,7 @@ defmodule Tester.TesterEngine do
     # GiocciEnginePubsub.start_link(1000)
     GiocciEngineStatus.start_link(1000)
     # CountQueue.start_link()
-    JobQueue.start_link(1000)
+    Job  # @spec execute_job(any(), any()) :: none()Queue.start_link(1000)
     CountRT.start_link(1000)
     CountQueue.start_link(1000)
     LinuxStatusRead.start_link(1000)
