@@ -1,9 +1,10 @@
 defmodule Tester.TesterEngine do
+  # alias Tester.TesterEngine, as: TE
   def tester1 do
     # GiocciEnginePubsub.start_link(1000)
     GiocciEngineStatus.start_link(1000)
     # CountQueue.start_link()
-    Job  # @spec execute_job(any(), any()) :: none()Queue.start_link(1000)
+    JobQueue.start_link(1000)
     CountRT.start_link(1000)
     CountQueue.start_link(1000)
     LinuxStatusRead.start_link(1000)
@@ -23,17 +24,19 @@ defmodule Tester.TesterEngine do
   end
 
   def tester_start do
-    GiocciEngineStatus.start_link(1000)
-    JobQueue.start_link(1000)
-    CountRT.start_link(1000)
-    ExecuteClientGiocciJob.start_link(1000)
-    CountQueue.start_link(1000)
-    LinuxStatusRead.start_link(1000)
-    GenServer.call(GiocciEngineStatus, :check_status)
+    GiocciEngineStatus.start_link("dummy")
+    GiocciEnginePubsub.start_engine_pubsub()
+    # JobQueue.start_link("dummy")
+    CountRT.start_link("dummy")
+    # ExecuteClientGiocciJob.start_link(1000)
+    CountQueue.start_link("dummy")
+    LinuxStatusRead.start_link("dummy")
+
+    tester_check_status()
   end
 
   def tester_start_cyclic_job do
-    GenServer.cast(CountQueue, :start)
+    # GenServer.cast(CountQueue, :start)
     GenServer.cast(LinuxStatusRead, :start)
     # GenServer.call(GiocciEngineStatus, :check_status)
   end
@@ -59,8 +62,11 @@ defmodule Tester.TesterEngine do
 
   end
 
+
+
+
   def tester_pubsub do
-    GiocciEnginePubsub.start_engine_pubsub()
+
     GiocciEnginePubsub.publish()
   end
 
@@ -69,23 +75,20 @@ defmodule Tester.TesterEngine do
   end
 
   def tester2 do
-    GiocciEnginePubsub.start_link(1000)
-    GiocciEngineStatus.start_link(1000)
-    JobQueue.start_link(1000)
-    CountRT.start_link(1000)
-    CountQueue.start_link(1000)
-    LinuxStatusRead.start_link(1000)
+    GiocciEngineStatus.start_link("dummy")
+    JobQueue.start_link("dummy")
+    CountRT.start_link("dummy")
+    CountQueue.start_link("dummy")
+    LinuxStatusRead.start_link("dummy")
+    GiocciEnginePubsub.start_link("dummy")
+    CountRT.start_link("dummy")
+    LinuxStatusRead.start_link("dummy")
     GenServer.cast(CountQueue, :start)
     GenServer.cast(LinuxStatusRead, :start)
-    GenServer.call(JobQueue, {:push_newtask, 1000})
-    GenServer.call(JobQueue, {:push_newtask, 1000})
-    GenServer.call(JobQueue, {:push_newtask, 1000})
-    GenServer.call(JobQueue, {:push_newtask, 1000})
 
-    SigotoFlow.do_task()
 
-    CountQueue.count_process()
-    CountQueue.update_process_number()
+    # CountQueue.count_process()
+    # CountQueue.update_process_number()
 
     # GiocciEnginePubsub.publish(session)
   end
